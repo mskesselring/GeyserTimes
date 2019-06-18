@@ -1,9 +1,10 @@
-import requests
-import json
 import datetime
-from tkinter import *
+import json
 import tkinter.ttk
+from tkinter import *
 from tkinter import messagebox
+
+import requests
 
 DEBUG = bool(0)
 url = {
@@ -40,12 +41,23 @@ entries = {}
 entry_string = ""
 
 
-def resize(event):
+def resize(e=None):
+    """
+    Resize listbox and scrollbar on window resize
+    @param e: Event
+    @return: None
+    """
+    if DEBUG:
+        print(e)
     geyser_scroll.pack(side=RIGHT, fill=Y)
     geyser_listbox.pack(side=LEFT, fill=BOTH, expand=YES)
 
 
 def refresh():
+    """
+    Get most recent eruption for all geysers
+    @return: None
+    """
     global entries
     if not DEBUG:
         r = requests.get(url["entries"] + "/" + entry_string)
@@ -61,7 +73,14 @@ def refresh():
     geyser_root.after(freq, refresh)
 
 
-def get_recent(event):
+def get_recent(e=None):
+    """
+    Display most recent eruption for selected geyser
+    @param e: Event
+    @return: None
+    """
+    if DEBUG:
+        print(e)
     name = geyser_listbox.get(geyser_listbox.curselection())
     geyser_id = geysers[name]["id"]
     if geyser_id in entries:
@@ -75,13 +94,16 @@ def get_recent(event):
         message = "Last Eruption: %s, Eruption Type: %s" % (
             time_str, event_type)
         messagebox.showinfo(name, message)
-        # print(name, time_str, event_type)
     else:
         tkinter.messagebox.showerror(name,
                                      "No entries found for " + name)
 
 
 def update():
+    """
+    Get and display all available eruption predictions
+    @return: None
+    """
     global geyser_labels, open_labels, close_labels, probability_labels, \
         updated_label
 
@@ -156,6 +178,10 @@ def update():
 
 
 def main():
+    """
+    Set up GUIs
+    @return: None
+    """
     # Get list of geysers
     global geysers
     if not DEBUG:
