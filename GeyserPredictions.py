@@ -37,6 +37,7 @@ geysers = {}
 geyser_listbox = None
 geyser_scroll = None
 entries = {}
+entry_string = ""
 
 
 def resize(event):
@@ -47,7 +48,7 @@ def resize(event):
 def refresh():
     global entries
     if not DEBUG:
-        r = requests.get(url["entries"])
+        r = requests.get(url["entries"] + "/" + entry_string)
         r = r.json()
         data = r["entries"]
         with open("entries.json", "w") as json_file:
@@ -168,10 +169,14 @@ def main():
             geyser_list = json.load(json_file)
 
     geyser_list.sort(key=lambda x: x["name"])
+    tmp = []
     for g in geyser_list:
         if "Uncommon" not in g["groupName"]:
             geysers[g["name"]] = g
-
+            tmp.append(g["id"])
+    tmp.sort(key=lambda x: int(x))
+    global entry_string
+    entry_string = ";".join(tmp)
     # Set up root windows
     global root, geyser_root, geyser_listbox, geyser_scroll
     geyser_root = Tk()
