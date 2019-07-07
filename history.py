@@ -27,8 +27,11 @@ class History:
             with open("geyserList.json", "w") as json_file:
                 json.dump(geyser_list, json_file)
         else:
-            with open("geyserList.json", "r") as json_file:
-                geyser_list = json.load(json_file)
+            try:
+                with open("geyserList.json", "r") as json_file:
+                    geyser_list = json.load(json_file)
+            except:
+                geyser_list = {}
 
         geyser_list.sort(key=lambda x: x["name"])
         tmp = []
@@ -85,8 +88,11 @@ class History:
             with open("entries.json", "w") as json_file:
                 json.dump(data, json_file)
         else:
-            with open("entries.json") as json_file:
-                data = json.load(json_file)
+            try:
+                with open("entries.json") as json_file:
+                    data = json.load(json_file)
+            except:
+                data = {}
         for e in data:
             self.entries[e["geyserID"]] = e
         self.root.after(self.freq, self.refresh)

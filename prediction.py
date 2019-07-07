@@ -67,8 +67,11 @@ class Predictions:
             with open("data.json", "w") as json_file:
                 json.dump(predictions, json_file)
         else:
-            with open("data.json") as json_file:
-                predictions = json.load(json_file)
+            try:
+                with open("data.json") as json_file:
+                    predictions = json.load(json_file)
+            except:
+                predictions = {}
 
         # Remove duplicate predictions, keep higher probability
         temp = {}
